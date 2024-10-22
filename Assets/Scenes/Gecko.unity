@@ -492,6 +492,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 838009902}
   headBone: {fileID: 1546861543}
+  headMaxTurnAngle: 60
+  headTrackingSpeed: 6
 --- !u!4 &1546861543 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5720832144177519227, guid: c739f80d32e3fc24a8419b6178262356, type: 3}

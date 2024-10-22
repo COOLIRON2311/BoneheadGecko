@@ -12,6 +12,8 @@ public class GeckoController : MonoBehaviour
     /// Gecko's neck
     /// </summary>
     [SerializeField] Transform headBone;
+    [SerializeField] float headMaxTurnAngle;
+    [SerializeField] float headTrackingSpeed;
 
     /// <summary>
     /// Allows other systems to update the environment first <br/>
@@ -19,12 +21,31 @@ public class GeckoController : MonoBehaviour
     /// </summary>
     private void LateUpdate()
     {
-        // vector pointing at the target from the head’s current position
-        Vector3 towardObjectFromHead = target.position - headBone.position;
+        // Store the current head rotation
+        Quaternion currentLocalRotation = headBone.localRotation;
+        // Reset the head rotation so world to local space transformation will use the head's "zero" rotation.
+        headBone.localRotation = Quaternion.identity;
 
-        // This method takes a Forward and Up direction, and outputs a rotation which,
-        // when applied to a transform, orients the transform so that its Z axis faces
-        // in the Forward direction, and its Y axis faces Up.
-        headBone.rotation = Quaternion.LookRotation(towardObjectFromHead, transform.up);
+        Vector3 targetWorldLookDir = target.position - headBone.position;
+        // Transform a direction from world space to local space
+        Vector3 targetLocalLookDir = headBone.InverseTransformDirection(targetWorldLookDir);
+
+        // Apply angle limit
+        targetLocalLookDir = Vector3.RotateTowards(
+            Vector3.forward,
+            targetLocalLookDir,
+            Mathf.Deg2Rad * headMaxTurnAngle,
+            0 // length is 0 because no one cares
+        );
+
+        // Get the local rotation by using LookRotation on a local directional vector
+        Quaternion targetLocalRotation = Quaternion.LookRotation(targetLocalLookDir, Vector3.up);
+
+        // Apply frame rate independent damping function smoothing
+        headBone.localRotation = Quaternion.Slerp(
+            currentLocalRotation,
+            targetLocalRotation,
+            1 - Mathf.Exp(-headTrackingSpeed * Time.deltaTime)
+        );
     }
 }
