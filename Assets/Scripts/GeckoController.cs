@@ -19,6 +19,12 @@ public class GeckoController : MonoBehaviour
     /// </summary>
     private void LateUpdate()
     {
+        // vector pointing at the target from the head’s current position
+        Vector3 towardObjectFromHead = target.position - headBone.position;
 
+        // This method takes a Forward and Up direction, and outputs a rotation which,
+        // when applied to a transform, orients the transform so that its Z axis faces
+        // in the Forward direction, and its Y axis faces Up.
+        headBone.rotation = Quaternion.LookRotation(towardObjectFromHead, transform.up);
     }
 }
