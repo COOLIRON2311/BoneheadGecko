@@ -15,11 +15,25 @@ public class GeckoController : MonoBehaviour
     [SerializeField] float headMaxTurnAngle;
     [SerializeField] float headTrackingSpeed;
 
+    [SerializeField] Transform leftEyeBone;
+    [SerializeField] Transform rightEyeBone;
+    [SerializeField] float eyeTrackingSpeed;
+    [SerializeField] float leftEyeMaxYRotation;
+    [SerializeField] float leftEyeMinYRotation;
+    [SerializeField] float rightEyeMaxYRotation;
+    [SerializeField] float rightEyeMinYRotation;
+
     /// <summary>
     /// Allows other systems to update the environment first <br/>
     /// The animation system will adapt to it before the frame is drawn
     /// </summary>
     private void LateUpdate()
+    {
+        HeadTrackingUpdate(); // Eyes are children of the head, so we want to make sure the head is updated first
+        EyeTrackingUpdate();
+    }
+
+    private void HeadTrackingUpdate()
     {
         // Store the current head rotation
         Quaternion currentLocalRotation = headBone.localRotation;
@@ -46,6 +60,65 @@ public class GeckoController : MonoBehaviour
             currentLocalRotation,
             targetLocalRotation,
             1 - Mathf.Exp(-headTrackingSpeed * Time.deltaTime)
+        );
+    }
+
+    private void EyeTrackingUpdate()
+    {
+        // Head position is used here (so no cross eyed gecko)
+        Quaternion targetEyeRotation = Quaternion.LookRotation(
+            target.position - headBone.position,
+            transform.up
+        );
+
+        leftEyeBone.rotation = Quaternion.Slerp(
+          leftEyeBone.rotation,
+          targetEyeRotation,
+          1 - Mathf.Exp(-eyeTrackingSpeed * Time.deltaTime)
+        );
+
+        rightEyeBone.rotation = Quaternion.Slerp(
+          rightEyeBone.rotation,
+          targetEyeRotation,
+          1 - Mathf.Exp(-eyeTrackingSpeed * Time.deltaTime)
+        );
+
+
+        float leftEyeCurrentYRotation = leftEyeBone.localEulerAngles.y;
+        float rightEyeCurrentYRotation = rightEyeBone.localEulerAngles.y;
+
+        // Map the rotation to -180..+180 degrees range
+        if (leftEyeCurrentYRotation > 180)
+            leftEyeCurrentYRotation -= 360;
+
+        if (rightEyeCurrentYRotation > 180)
+            rightEyeCurrentYRotation -= 360;
+
+
+        // Clamp the Y axis rotation
+        float leftEyeClampedYRotation = Mathf.Clamp(
+            leftEyeCurrentYRotation,
+            leftEyeMinYRotation,
+            leftEyeMaxYRotation
+        );
+
+        float rightEyeClampedYRotation = Mathf.Clamp(
+            rightEyeCurrentYRotation,
+            rightEyeMinYRotation,
+            rightEyeMaxYRotation
+        );
+
+        
+        // Apply the clamped Y rotation without changing the X and Z rotations
+        leftEyeBone.localEulerAngles = new Vector3(
+            leftEyeBone.localEulerAngles.x,
+            leftEyeClampedYRotation,
+            leftEyeBone.localEulerAngles.z
+        );
+        rightEyeBone.localEulerAngles = new Vector3(
+            rightEyeBone.localEulerAngles.x,
+            rightEyeClampedYRotation,
+            rightEyeBone.localEulerAngles.z
         );
     }
 }

@@ -494,9 +494,26 @@ MonoBehaviour:
   headBone: {fileID: 1546861543}
   headMaxTurnAngle: 60
   headTrackingSpeed: 6
+  leftEyeBone: {fileID: 1546861545}
+  rightEyeBone: {fileID: 1546861544}
+  eyeTrackingSpeed: 70
+  leftEyeMaxYRotation: 10
+  leftEyeMinYRotation: -90
+  rightEyeMaxYRotation: 90
+  rightEyeMinYRotation: -10
 --- !u!4 &1546861543 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5720832144177519227, guid: c739f80d32e3fc24a8419b6178262356, type: 3}
+  m_PrefabInstance: {fileID: 1546861540}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1546861544 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5720832144177519189, guid: c739f80d32e3fc24a8419b6178262356, type: 3}
+  m_PrefabInstance: {fileID: 1546861540}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1546861545 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5720832144177519187, guid: c739f80d32e3fc24a8419b6178262356, type: 3}
   m_PrefabInstance: {fileID: 1546861540}
   m_PrefabAsset: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
