@@ -80,7 +80,7 @@ public class LegStepper : MonoBehaviour
         Moving = false;
     }
 
-    private void Update()
+    public void TryMove()
     {
         // Don't start another move if already moving
         if (Moving)

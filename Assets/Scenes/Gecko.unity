@@ -656,6 +656,10 @@ MonoBehaviour:
   leftEyeMinYRotation: -90
   rightEyeMaxYRotation: 90
   rightEyeMinYRotation: -10
+  frontLeftLegStepper: {fileID: 0}
+  frontRightLegStepper: {fileID: 0}
+  backLeftLegStepper: {fileID: 0}
+  backRightLegStepper: {fileID: 0}
 --- !u!4 &1546861543 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5720832144177519227, guid: c739f80d32e3fc24a8419b6178262356, type: 3}
@@ -721,6 +725,10 @@ MonoBehaviour:
   leftEyeMinYRotation: -180
   rightEyeMaxYRotation: 180
   rightEyeMinYRotation: -10
+  frontLeftLegStepper: {fileID: 424028012}
+  frontRightLegStepper: {fileID: 2085568451}
+  backLeftLegStepper: {fileID: 1739540498}
+  backRightLegStepper: {fileID: 1145185228}
 --- !u!4 &1886865623 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1718019625230677970, guid: a8ae01c31f028c745bcf60c0f1b35221, type: 3}

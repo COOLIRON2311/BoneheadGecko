@@ -8,13 +8,18 @@ public class GeckoController : MonoBehaviour
     /// Tracking target
     /// </summary>
     [SerializeField] Transform target;
+    #region Head
+    [Header("Head Tracking")]
     /// <summary>
     /// Gecko's neck
     /// </summary>
     [SerializeField] Transform headBone;
     [SerializeField] float headMaxTurnAngle;
     [SerializeField] float headTrackingSpeed;
+    #endregion
 
+    #region Eyes
+    [Header("Eyes Tracking")]
     [SerializeField] Transform leftEyeBone;
     [SerializeField] Transform rightEyeBone;
     [SerializeField] float eyeTrackingSpeed;
@@ -22,6 +27,15 @@ public class GeckoController : MonoBehaviour
     [SerializeField] float leftEyeMinYRotation;
     [SerializeField] float rightEyeMaxYRotation;
     [SerializeField] float rightEyeMinYRotation;
+    #endregion
+
+    #region Legs
+    [Header("Legs")]
+    [SerializeField] LegStepper frontLeftLegStepper;
+    [SerializeField] LegStepper frontRightLegStepper;
+    [SerializeField] LegStepper backLeftLegStepper;
+    [SerializeField] LegStepper backRightLegStepper;
+    #endregion
 
     /// <summary>
     /// Allows other systems to update the environment first <br/>
@@ -31,6 +45,11 @@ public class GeckoController : MonoBehaviour
     {
         HeadTrackingUpdate(); // Eyes are children of the head, so we want to make sure the head is updated first
         EyeTrackingUpdate();
+    }
+
+    private void Awake()
+    {
+        StartCoroutine(LegUpdateCoroutine());
     }
 
     private void HeadTrackingUpdate()
@@ -108,7 +127,7 @@ public class GeckoController : MonoBehaviour
             rightEyeMaxYRotation
         );
 
-        
+
         // Apply the clamped Y rotation without changing the X and Z rotations
         leftEyeBone.localEulerAngles = new Vector3(
             leftEyeBone.localEulerAngles.x,
@@ -120,5 +139,32 @@ public class GeckoController : MonoBehaviour
             rightEyeClampedYRotation,
             rightEyeBone.localEulerAngles.z
         );
+    }
+
+    /// <summary>
+    /// Only allow diagonal leg pairs to step together
+    /// </summary>
+    IEnumerator LegUpdateCoroutine()
+    {
+        while (true)
+        {
+            // Try moving one diagonal pair of legs
+            do
+            {
+                frontLeftLegStepper.TryMove();
+                backRightLegStepper.TryMove();
+                // Wait a frame
+                yield return null;
+                // Stay in this loop while either leg is moving
+            } while (backRightLegStepper.Moving || frontLeftLegStepper.Moving);
+
+            // Do the same thing for the other diagonal pair
+            do
+            {
+                frontRightLegStepper.TryMove();
+                backLeftLegStepper.TryMove();
+                yield return null;
+            } while (backLeftLegStepper.Moving || frontRightLegStepper.Moving);
+        }
     }
 }
