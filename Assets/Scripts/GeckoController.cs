@@ -29,6 +29,33 @@ public class GeckoController : MonoBehaviour
     [SerializeField] float rightEyeMinYRotation;
     #endregion
 
+    #region Root
+    [Header("Root motion")]
+    [SerializeField] float turnSpeed;
+    [SerializeField] float moveSpeed;
+    // How fast we will reach the above speeds
+    [SerializeField] float turnAcceleration;
+    [SerializeField] float moveAcceleration;
+    /// <summary>
+    /// Try to stay in this range from the target
+    /// </summary>
+    [SerializeField] float minDistToTarget;
+    /// <summary>
+    /// Try to stay in this range from the target
+    /// </summary>
+    [SerializeField] float maxDistToTarget;
+    /// <summary>
+    /// Turning angle threshold
+    /// </summary>
+    [SerializeField] float maxAngToTarget;
+
+    /// <summary>
+    /// World space velocity
+    /// </summary>
+    Vector3 currentVelocity;
+    float currentAngularVelocity;
+    #endregion
+
     #region Legs
     [Header("Legs")]
     [SerializeField] LegStepper frontLeftLegStepper;
@@ -43,6 +70,7 @@ public class GeckoController : MonoBehaviour
     /// </summary>
     private void LateUpdate()
     {
+        RootMotionUpdate();
         HeadTrackingUpdate(); // Eyes are children of the head, so we want to make sure the head is updated first
         EyeTrackingUpdate();
     }
@@ -91,15 +119,15 @@ public class GeckoController : MonoBehaviour
         );
 
         leftEyeBone.rotation = Quaternion.Slerp(
-          leftEyeBone.rotation,
-          targetEyeRotation,
-          1 - Mathf.Exp(-eyeTrackingSpeed * Time.deltaTime)
+            leftEyeBone.rotation,
+            targetEyeRotation,
+            1 - Mathf.Exp(-eyeTrackingSpeed * Time.deltaTime)
         );
 
         rightEyeBone.rotation = Quaternion.Slerp(
-          rightEyeBone.rotation,
-          targetEyeRotation,
-          1 - Mathf.Exp(-eyeTrackingSpeed * Time.deltaTime)
+            rightEyeBone.rotation,
+            targetEyeRotation,
+            1 - Mathf.Exp(-eyeTrackingSpeed * Time.deltaTime)
         );
 
 
@@ -166,5 +194,79 @@ public class GeckoController : MonoBehaviour
                 yield return null;
             } while (backLeftLegStepper.Moving || frontRightLegStepper.Moving);
         }
+    }
+
+    /// <summary>
+    /// Rotate gecko's body toward the target
+    /// </summary>
+    void RootMotionUpdate()
+    {
+        #region Rotation
+        Vector3 towardTarget = target.position - transform.position;
+        // Project the direction toward the target to the local XZ plane
+        Vector3 towardTargetProjected = Vector3.ProjectOnPlane(towardTarget, transform.up);
+        // Get the angle from the gecko's forward direction to the direction toward toward our target
+        // Here we get the signed angle around the up vector so we know which direction to turn in
+        float angToTarget = Vector3.SignedAngle(transform.forward, towardTargetProjected, transform.up);
+
+        float targetAngularVelocity = 0;
+
+        // If we are within the max angle (i.e. approximately facing the target)
+        // leave the target angular velocity at zero
+        if (Mathf.Abs(angToTarget) > maxAngToTarget)
+        {
+            // Angles in Unity are clockwise, so a positive angle here means to our right
+            if (angToTarget > 0)
+            {
+                targetAngularVelocity = turnSpeed;
+            }
+            // Invert angular speed if target is to our left
+            else
+            {
+                targetAngularVelocity = -turnSpeed;
+            }
+        }
+
+        // Use the smoothing function to gradually change the velocity
+        currentAngularVelocity = Mathf.Lerp(
+            currentAngularVelocity,
+            targetAngularVelocity,
+            1 - Mathf.Exp(-turnAcceleration * Time.deltaTime)
+        );
+
+        // Rotate the transform around the Y axis in world space,
+        // making sure to multiply by delta time to get a consistent angular velocity
+        transform.Rotate(0, Time.deltaTime * currentAngularVelocity, 0, Space.World);
+        #endregion
+
+        #region Movement
+        Vector3 targetVelocity = Vector3.zero;
+
+        // Don't move if we're facing away from the target, just rotate in place
+        if (Mathf.Abs(angToTarget) < 90)
+        {
+            float distToTarget = Vector3.Distance(transform.position, target.position);
+
+            // If we're too far away, approach the target
+            if (distToTarget > maxDistToTarget)
+            {
+                targetVelocity = moveSpeed * towardTargetProjected.normalized;
+            }
+            // If we're too close, reverse the direction and move away
+            else if (distToTarget < minDistToTarget)
+            {
+                targetVelocity = moveSpeed * -towardTargetProjected.normalized;
+            }
+        }
+
+        currentVelocity = Vector3.Lerp(
+            currentVelocity,
+            targetVelocity,
+            1 - Mathf.Exp(-moveAcceleration * Time.deltaTime)
+        );
+
+        // Apply the velocity
+        transform.position += currentVelocity * Time.deltaTime;
+        #endregion
     }
 }

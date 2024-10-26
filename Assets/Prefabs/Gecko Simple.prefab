@@ -231,6 +231,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1718019626052821792}
+  - component: {fileID: 9176594638638524779}
   m_Layer: 0
   m_Name: LegStepper B_R
   m_TagString: Untagged
@@ -253,6 +254,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 670098536965243655}
   m_LocalEulerAnglesHint: {x: 0, y: 126.43201, z: 0}
+--- !u!114 &9176594638638524779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718019626052821795}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bcfd10c10c533c459f0e9dc5b208301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  homeTransform: {fileID: 1718019624919989577}
+  wantStepAtDistance: 0.6
+  moveDuration: 0.125
+  stepOvershootFraction: 0.75
+  Moving: 0
 --- !u!1 &1718019626062075388
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,6 +311,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1718019626149478042}
+  - component: {fileID: 370375066687086871}
   m_Layer: 0
   m_Name: LegStepper F_R
   m_TagString: Untagged
@@ -315,6 +334,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 670098536965243655}
   m_LocalEulerAnglesHint: {x: 0, y: 45, z: 0}
+--- !u!114 &370375066687086871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718019626149478037}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bcfd10c10c533c459f0e9dc5b208301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  homeTransform: {fileID: 1718019626062075389}
+  wantStepAtDistance: 0.45
+  moveDuration: 0.125
+  stepOvershootFraction: 0.75
+  Moving: 0
 --- !u!1 &1718019626369693454
 GameObject:
   m_ObjectHideFlags: 0
@@ -355,6 +391,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1718019626499813777}
+  - component: {fileID: 5490587497414321913}
   m_Layer: 0
   m_Name: LegStepper B_L
   m_TagString: Untagged
@@ -377,6 +414,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 670098536965243655}
   m_LocalEulerAnglesHint: {x: 0, y: -110.703, z: 0}
+--- !u!114 &5490587497414321913
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718019626499813776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bcfd10c10c533c459f0e9dc5b208301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  homeTransform: {fileID: 1718019626369693455}
+  wantStepAtDistance: 0.6
+  moveDuration: 0.125
+  stepOvershootFraction: 0.75
+  Moving: 0
 --- !u!1 &1718019626537496119
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,6 +440,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1718019626537496116}
+  - component: {fileID: 2036162200406223076}
   m_Layer: 0
   m_Name: LegStepper F_L
   m_TagString: Untagged
@@ -408,6 +463,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 670098536965243655}
   m_LocalEulerAnglesHint: {x: 0, y: -45, z: 0}
+--- !u!114 &2036162200406223076
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718019626537496119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bcfd10c10c533c459f0e9dc5b208301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  homeTransform: {fileID: 1718019625230677970}
+  wantStepAtDistance: 0.45
+  moveDuration: 0.125
+  stepOvershootFraction: 0.75
+  Moving: 0
 --- !u!1 &7893271778912634880
 GameObject:
   m_ObjectHideFlags: 0
@@ -522,6 +594,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7893271778912605222}
+  - component: {fileID: 4101916023094422610}
   m_Layer: 0
   m_Name: Gecko_Simple
   m_TagString: Untagged
@@ -546,6 +619,40 @@ Transform:
   - {fileID: 7893271778912605186}
   m_Father: {fileID: 670098536965243655}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4101916023094422610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7893271778912634886}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7854a6ac48d416f47ad4bf86bfdd7e60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 0}
+  headBone: {fileID: 7893271778912605188}
+  headMaxTurnAngle: 60
+  headTrackingSpeed: 6
+  leftEyeBone: {fileID: 7893271778912605228}
+  rightEyeBone: {fileID: 7893271778912605226}
+  eyeTrackingSpeed: 30
+  leftEyeMaxYRotation: 10
+  leftEyeMinYRotation: -180
+  rightEyeMaxYRotation: 180
+  rightEyeMinYRotation: -10
+  turnSpeed: 150
+  moveSpeed: 3
+  turnAcceleration: 4
+  moveAcceleration: 1
+  minDistToTarget: 4.5
+  maxDistToTarget: 6
+  maxAngToTarget: 25
+  frontLeftLegStepper: {fileID: 2036162200406223076}
+  frontRightLegStepper: {fileID: 370375066687086871}
+  backLeftLegStepper: {fileID: 5490587497414321913}
+  backRightLegStepper: {fileID: 9176594638638524779}
 --- !u!1 &7893271778912634890
 GameObject:
   m_ObjectHideFlags: 0
